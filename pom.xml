@@ -5,10 +5,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.fluxit</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>keycloak-spi-demo</artifactId>
 	<version>0.0.2</version>
 	<name>demo</name>
-	<description>Keycloak Demo</description>
+	<description>Keycloak SPI Demo</description>
 	<packaging>jar</packaging>
 
 	<dependencies>

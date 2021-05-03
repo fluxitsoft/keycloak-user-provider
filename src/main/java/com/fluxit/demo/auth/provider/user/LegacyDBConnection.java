@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import org.keycloak.component.ComponentModel;
 
 
-public class DbUtil {
+public class LegacyDBConnection {
 
     private static final String CONFIG_KEY_JDBC_DRIVER = "config.key.jdbc.driver";
     private static final String CONFIG_KEY_JDBC_URL = "config.key.jdbc.url";
