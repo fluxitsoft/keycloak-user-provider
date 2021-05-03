@@ -27,25 +27,6 @@ public class LegacyUserStorageProviderFactory implements UserStorageProviderFact
 	
 	protected Properties properties = new Properties();
 
-	public LegacyUserStorageProviderFactory() {
-//		log.info("LegacyUserStorageProviderFactory created");
-//
-//		configMetadata = ProviderConfigurationBuilder.create().property()
-//				.name(LegacyUserStorageProviderProperties.CONFIG_KEY_JDBC_DRIVER).label("JDBC Driver Class")
-//				.type(ProviderConfigProperty.STRING_TYPE).defaultValue("org.h2.Driver")
-//				.helpText("Fully qualified class name of the JDBC driver").add().property()
-//				.name(LegacyUserStorageProviderProperties.CONFIG_KEY_JDBC_URL).label("JDBC URL")
-//				.type(ProviderConfigProperty.STRING_TYPE).defaultValue("jdbc:h2:mem:Legacydb")
-//				.helpText("JDBC URL used to connect to the user database").add().property()
-//				.name(LegacyUserStorageProviderProperties.CONFIG_KEY_DB_USERNAME).label("Database User")
-//				.type(ProviderConfigProperty.STRING_TYPE).helpText("Username used to connect to the database").add()
-//				.property().name(LegacyUserStorageProviderProperties.CONFIG_KEY_DB_PASSWORD).label("Database Password")
-//				.type(ProviderConfigProperty.STRING_TYPE).helpText("Password used to connect to the database")
-//				.secret(true).add().property().name(LegacyUserStorageProviderProperties.CONFIG_KEY_VALIDATION_QUERY)
-//				.label("SQL Validation Query").type(ProviderConfigProperty.STRING_TYPE)
-//				.helpText("SQL query used to validate a connection").defaultValue("select 1;").add().build();
-	}
-
 	@Override
 	public void init(Config.Scope config) {
 		InputStream is = getClass().getClassLoader().getResourceAsStream("/legacy.properties");
@@ -88,9 +69,9 @@ public class LegacyUserStorageProviderFactory implements UserStorageProviderFact
 	 
 	 
 	@Override
-	public LegacyUserStorageProvider create(KeycloakSession ksession, ComponentModel model) {
+	public LegacyUserStorageProvider create(KeycloakSession session, ComponentModel model) {
 		log.info("creating new LegacyUserStorageProvider");
-		return new LegacyUserStorageProvider(ksession, model);
+		return new LegacyUserStorageProvider(session, model);
 	}
 
 	@Override
@@ -107,7 +88,7 @@ public class LegacyUserStorageProviderFactory implements UserStorageProviderFact
 	public void validateConfiguration(KeycloakSession session, RealmModel realm, ComponentModel config)
 			throws ComponentValidationException {
 
-		try (Connection c = DbUtil.getConnection(config)) {
+		try (Connection c = LegacyDBConnection.getConnection(config)) {
 			log.info("Testing connection");
 			c.createStatement().execute(config.get("config.key.validation.query"));
 			log.info("Connection OK");

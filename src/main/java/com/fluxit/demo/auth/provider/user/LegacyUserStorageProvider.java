@@ -48,7 +48,7 @@ public class LegacyUserStorageProvider
 	@Override
 	public int getUsersCount(RealmModel realm) {
 		log.info("getUsersCount: realm={}", realm.getName());
-		try (Connection c = DbUtil.getConnection(this.model)) {
+		try (Connection c = LegacyDBConnection.getConnection(this.model)) {
 			Statement st = c.createStatement();
 			st.execute("select count(*) from users");
 			ResultSet rs = st.getResultSet();
@@ -69,7 +69,7 @@ public class LegacyUserStorageProvider
 	public List<UserModel> getUsers(RealmModel realm, int firstResult, int maxResults) {
 		log.info("getUsers: realm={}", realm.getName());
 
-		try (Connection c = DbUtil.getConnection(this.model)) {
+		try (Connection c = LegacyDBConnection.getConnection(this.model)) {
 			PreparedStatement st = c.prepareStatement(
 					"select username, firstName,lastName, email, birthDate from users order by username limit ? offset ?");
 			st.setInt(1, maxResults);
@@ -95,7 +95,7 @@ public class LegacyUserStorageProvider
 	public List<UserModel> searchForUser(String search, RealmModel realm, int firstResult, int maxResults) {
 		log.info("searchForUser: realm={}", realm.getName());
 
-		try (Connection c = DbUtil.getConnection(this.model)) {
+		try (Connection c = LegacyDBConnection.getConnection(this.model)) {
 			PreparedStatement st = c.prepareStatement(
 					"select username, firstName,lastName, email, birthDate from users where username like ? order by username limit ? offset ?");
 			st.setString(1, search);
@@ -162,7 +162,7 @@ public class LegacyUserStorageProvider
 		StorageId sid = new StorageId(user.getId());
 		String username = sid.getExternalId();
 
-		try (Connection c = DbUtil.getConnection(this.model)) {
+		try (Connection c = LegacyDBConnection.getConnection(this.model)) {
 			PreparedStatement st = c.prepareStatement("select password from users where username = ?");
 			st.setString(1, username);
 			st.execute();
@@ -188,7 +188,7 @@ public class LegacyUserStorageProvider
 	@Override
 	public UserModel getUserByUsername(String username, RealmModel realm) {
 		log.info("getUserByUsername({})", username);
-		try (Connection c = DbUtil.getConnection(this.model)) {
+		try (Connection c = LegacyDBConnection.getConnection(this.model)) {
 			PreparedStatement st = c.prepareStatement(
 					"select username, firstName, lastName, email, birthDate from users where username = ?");
 			st.setString(1, username);
@@ -207,7 +207,7 @@ public class LegacyUserStorageProvider
 	@Override
 	public UserModel getUserByEmail(String email, RealmModel realm) {
 		log.info("getUserByEmail({})", email);
-		try (Connection c = DbUtil.getConnection(this.model)) {
+		try (Connection c = LegacyDBConnection.getConnection(this.model)) {
 			PreparedStatement st = c.prepareStatement(
 					"select username, firstName,lastName, email, birthDate from users where email = ?");
 			st.setString(1, email);
